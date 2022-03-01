@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class PassgenController {
 	
-	private final static String DEFAULT_SALT = gensalt(12);
+	private static final String DEFAULT_SALT = gensalt(12);
 	
 	@GetMapping("hash")
 	public ResponseEntity<String> hash(@RequestParam(required = false) Integer salt, @RequestParam String src) {
