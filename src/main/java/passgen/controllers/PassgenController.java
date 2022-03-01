@@ -35,7 +35,7 @@ public class PassgenController {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> badLogRounds(IllegalArgumentException e) {
 		Logger.getAnonymousLogger().severe(e.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The value for salt must be over 4 and below 31.");
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The value for salt must be over 4 and up to 31.");
 	}
 	
 }
