@@ -4,8 +4,6 @@ import static java.util.Objects.isNull;
 import static org.springframework.security.crypto.bcrypt.BCrypt.gensalt;
 import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
 
-import java.util.logging.Logger;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -15,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import passgen.util.Log;
+
 @RestController
 @RequestMapping("/")
 public class PassgenController {
 	
-	private final static Logger LOGGER = Logger.getLogger(PassgenController.class.getName());
-	
 	private static final String DEFAULT_SALT = gensalt(12);
+	
+	private static final String MISSING_SRC = "Target string (src) must be specified.";
+	private static final String INVALID_SALT = "The value for salt must be over 4 and up to 31.";
 	
 	@GetMapping("hash")
 	public ResponseEntity<String> hash(@RequestParam(required = false) Integer salt, @RequestParam String src) {
@@ -30,14 +31,14 @@ public class PassgenController {
 	
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<String> missingStringParam(MissingServletRequestParameterException e) {
-		LOGGER.severe(e.getMessage());
-		return ResponseEntity.badRequest().body("Target string (src) must be specified.");
+		Log.error(MISSING_SRC, e);
+		return ResponseEntity.badRequest().body(MISSING_SRC);
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> badLogRounds(IllegalArgumentException e) {
-		LOGGER.severe(e.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The value for salt must be over 4 and up to 31.");
+		Log.error(INVALID_SALT, e);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INVALID_SALT);
 	}
 	
 }
