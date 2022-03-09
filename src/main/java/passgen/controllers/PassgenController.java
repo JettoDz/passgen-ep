@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class PassgenController {
 	
+	private final static Logger LOGGER = Logger.getLogger(PassgenController.class.getName());
+	
 	private static final String DEFAULT_SALT = gensalt(12);
 	
 	@GetMapping("hash")
@@ -28,13 +30,13 @@ public class PassgenController {
 	
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<String> missingStringParam(MissingServletRequestParameterException e) {
-		Logger.getAnonymousLogger().severe(e.getMessage());
+		LOGGER.severe(e.getMessage());
 		return ResponseEntity.badRequest().body("Target string (src) must be specified.");
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> badLogRounds(IllegalArgumentException e) {
-		Logger.getAnonymousLogger().severe(e.getMessage());
+		LOGGER.severe(e.getMessage());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("The value for salt must be over 4 and up to 31.");
 	}
 	
