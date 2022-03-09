@@ -39,6 +39,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>	
+						<configuration>
+							<mainClass>mx.com.bmf.passgen-ep.passgen.PassgenEpApplication</mainClass>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<finalName>passgen</finalName>
