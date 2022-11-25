@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import passgen.util.Log;
+import passgen.util.Logging;
 
 @RestController
 @RequestMapping("/")
-public class PassgenController {
+public class PassgenController implements Logging {
 	
 	private static final String DEFAULT_SALT = gensalt(12);
 	
@@ -31,13 +31,13 @@ public class PassgenController {
 	
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<String> missingStringParam(MissingServletRequestParameterException e) {
-		Log.error(MISSING_SRC, e);
+		error(MISSING_SRC, e);
 		return ResponseEntity.badRequest().body(MISSING_SRC);
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> badLogRounds(IllegalArgumentException e) {
-		Log.error(INVALID_SALT, e);
+		error(INVALID_SALT, e);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INVALID_SALT);
 	}
 	
